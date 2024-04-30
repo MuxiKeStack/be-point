@@ -46,6 +46,9 @@ func (p *PointServiceServer) GetTitleOfUser(ctx context.Context, request *pointv
 
 func (p *PointServiceServer) SaveUsingTitleOfUser(ctx context.Context, request *pointv1.SaveUsingTitleOfUserRequest) (*pointv1.SaveUsingTitleOfUserResponse, error) {
 	err := p.titleSvc.SaveUsingTitleOfUser(ctx, request.GetUid(), request.GetTitle())
+	if err == service.ErrPointsNotEnough {
+		return &pointv1.SaveUsingTitleOfUserResponse{}, pointv1.ErrorPointNotEnough("积分不足")
+	}
 	return &pointv1.SaveUsingTitleOfUserResponse{}, err
 }
 
