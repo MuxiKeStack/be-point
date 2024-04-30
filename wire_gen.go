@@ -28,7 +28,7 @@ func InitApp() *App {
 	pointService := service.NewPointService(pointRepository)
 	titleDAO := dao.NewGORMTitleDAO(db)
 	titleRepository := repository.NewTitleRepository(titleDAO)
-	titleService := ioc.InitTitleService(titleRepository, pointService)
+	titleService := ioc.InitTitleService(titleRepository, pointService, logger)
 	pointServiceServer := grpc.NewPointServiceServer(pointService, titleService)
 	client := ioc.InitEtcdClient()
 	server := ioc.InitGRPCxKratosServer(pointServiceServer, client, logger)
