@@ -26,7 +26,7 @@ func (e *EvaluationHandler) Handle(event canalx.Message[any]) error {
 	if err != nil {
 		return err
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 	for i, item := range update {
 		id, er := strconv.ParseInt(item.Id, 10, 64)
@@ -41,9 +41,12 @@ func (e *EvaluationHandler) Handle(event canalx.Message[any]) error {
 		if er != nil {
 			return er
 		}
-		oldStatus, er := strconv.ParseInt(old[i].Status, 10, 64)
-		if er != nil {
-			return er
+		var oldStatus int64
+		if len(old) >= i+1 {
+			oldStatus, er = strconv.ParseInt(old[i].Status, 10, 64)
+			if er != nil {
+				return er
+			}
 		}
 		er = e.svc.HandleEvaluation(ctx, event.Type, uid, id, item.Content, evaluationv1.EvaluationStatus(updateStatus),
 			evaluationv1.EvaluationStatus(oldStatus))

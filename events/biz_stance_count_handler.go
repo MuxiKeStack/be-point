@@ -37,13 +37,16 @@ func (b *BizStanceCountHandler) Handle(event canalx.Message[any]) error {
 		if er != nil {
 			return er
 		}
-		updateSupportCnt, er := strconv.ParseInt(item.OpposeCnt, 10, 64)
+		updateSupportCnt, er := strconv.ParseInt(item.SupportCnt, 10, 64)
 		if er != nil {
 			return er
 		}
-		oldSupportCnt, er := strconv.ParseInt(old[i].SupportCnt, 10, 64)
-		if er != nil {
-			return er
+		var oldSupportCnt int64
+		if len(old) >= i+1 {
+			oldSupportCnt, er = strconv.ParseInt(old[i].SupportCnt, 10, 64)
+			if er != nil {
+				return er
+			}
 		}
 		er = b.svc.HandleBizStanceCount(ctx, event.Type, stancev1.Biz(biz), bizId, updateSupportCnt, oldSupportCnt)
 		if er != nil {

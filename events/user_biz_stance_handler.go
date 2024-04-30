@@ -37,9 +37,12 @@ func (u *UserBizStanceHandler) Handle(event canalx.Message[any]) error {
 		if er != nil {
 			return er
 		}
-		oldStance, er := strconv.ParseInt(old[i].Stance, 10, 64)
-		if er != nil {
-			return er
+		var oldStance int64
+		if len(old) >= i+1 {
+			oldStance, er = strconv.ParseInt(old[i].Stance, 10, 64)
+			if er != nil {
+				return er
+			}
 		}
 		er = u.svc.HandleUserBizStance(ctx, event.Type, uid, stancev1.Stance(updateStance), stancev1.Stance(oldStance))
 		if er != nil {

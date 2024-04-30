@@ -37,9 +37,12 @@ func (g *GradeShareAgreementHandler) Handle(event canalx.Message[any]) error {
 		if er != nil {
 			return er
 		}
-		oldIsSigned, er := strconv.ParseBool(old[i].IsSigned)
-		if er != nil {
-			return er
+		var oldIsSigned bool
+		if len(old) >= i+1 {
+			oldIsSigned, er = strconv.ParseBool(old[i].IsSigned)
+			if er != nil {
+				return er
+			}
 		}
 		er = g.svc.HandleGradeShareAgreement(ctx, event.Type, uid, updateIsSigned, oldIsSigned)
 		if er != nil {
