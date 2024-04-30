@@ -1,0 +1,25 @@
+mysql:
+  dsn: "root:root@tcp(localhost:3306)/kstack"
+
+redis:
+  addr: "localhost:6379"
+
+etcd:
+  endpoints:
+    - "localhost:12379"
+
+grpc:
+  server:
+    name: "point"
+    weight: 100
+    addr: ":19095"
+    etcdTTL: 60
+  client:
+    answer:
+      endpoint: "discovery:///answer"
+    evaluation:
+      endpoint: "discovery:///evaluation"
+
+kafka:
+  addrs:
+    - "localhost:9094"
