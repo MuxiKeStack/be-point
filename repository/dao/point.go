@@ -34,8 +34,8 @@ func (dao *GORMPointDAO) InsertChange(ctx context.Context, pc PointChange) error
 		}
 		// 尝试更新用户积分，如果不存在则插入新记录，todo 关与upsert和update的性能分析
 		sql := "INSERT INTO user_points (uid, points, ctime, utime) VALUES (?, GREATEST(0, ?), ?, ?) " +
-			"ON DUPLICATE KEY UPDATE points = GREATEST(0, points + VALUES(points)), utime = VALUES(utime)"
-		return tx.Exec(sql, pc.Uid, pc.ChangeAmount, now, now).Error
+			"ON DUPLICATE KEY UPDATE points = GREATEST(0, points + ?), utime = VALUES(utime)"
+		return tx.Exec(sql, pc.Uid, pc.ChangeAmount, now, now, pc.ChangeAmount).Error
 	})
 }
 
@@ -51,6 +51,7 @@ func (dao *GORMPointDAO) FindOldestChaneBySource(ctx context.Context, source str
 func (dao *GORMPointDAO) CountChangeByReasonSource(ctx context.Context, reason string, source string) (int64, error) {
 	var cnt int64
 	err := dao.db.WithContext(ctx).
+		Model(&PointChange{}).
 		Where("source = ? and reason = ?", source, reason).
 		Count(&cnt).Error
 	return cnt, err
