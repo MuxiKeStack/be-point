@@ -50,7 +50,7 @@ func (p *pointMaintenanceService) HandleGradeShareAgreement(ctx context.Context,
 				Uid:          uid,
 				ChangeAmount: +15,
 				Reason:       "签约",
-				Source:       "GradeShareAgreement",
+				Source:       "grade_share_agreement",
 			})
 		}
 	} else if typ == UPDATE {
@@ -60,7 +60,7 @@ func (p *pointMaintenanceService) HandleGradeShareAgreement(ctx context.Context,
 				Uid:          uid,
 				ChangeAmount: +15,
 				Reason:       "签约",
-				Source:       "GradeShareAgreement",
+				Source:       "grade_share_agreement",
 			})
 		} else if !updateIsSigned && oldIsSigned {
 			// change ==> -=15
@@ -68,7 +68,7 @@ func (p *pointMaintenanceService) HandleGradeShareAgreement(ctx context.Context,
 				Uid:          uid,
 				ChangeAmount: -15,
 				Reason:       "取消签约",
-				Source:       "GradeShareAgreement",
+				Source:       "grade_share_agreement",
 			})
 		}
 	}
