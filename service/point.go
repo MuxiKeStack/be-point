@@ -24,6 +24,7 @@ func (p *pointService) GetPointInfoOfUser(ctx context.Context, uid int64) (domai
 		return domain.UserPointInfo{}, err
 	}
 	// 根据用户现有的积分，判断level和nextLevelPoints
+	// TODO 这一步的计算应该放在domain object上面，尽量让领域对象来拥有这一部分的逻辑而不是在domain service
 	level, nextLevelPoints := p.calculateLevelAndNextPoints(points)
 	return domain.UserPointInfo{
 		Uid:             uid,
